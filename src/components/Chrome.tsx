@@ -1,9 +1,8 @@
 import { useStore } from "../store";
-import { BagIcon, BikeIcon, CheckIcon, CrepeIcon, WhatsAppIcon } from "./Icons";
+import { BikeIcon, CheckIcon, CrepeIcon } from "./Icons";
 
 export function MobileBar() {
-  const { setCartOpen, cartCount, setVenue, waLink } = useStore();
-  const direct = waLink("¡Hola! Vengo desde la carta digital y quisiera pedir algo.");
+  const { setVenue } = useStore();
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -14,7 +13,7 @@ export function MobileBar() {
       className="fixed inset-x-0 bottom-0 z-40 border-t border-gold/20 bg-[#12100e] pb-[env(safe-area-inset-bottom)] lg:hidden"
       aria-label="Acciones rápidas"
     >
-      <div className="grid h-[62px] grid-cols-5">
+      <div className="grid h-[62px] grid-cols-3">
         <button
           type="button"
           onClick={() => scrollTo("carta")}
@@ -51,58 +50,8 @@ export function MobileBar() {
             Repostería Bikery
           </span>
         </button>
-        <button
-          type="button"
-          onClick={() => setCartOpen(true)}
-          className="relative flex flex-col items-center justify-center gap-1 text-cream/60 transition-colors hover:text-gold"
-        >
-          <BagIcon className="h-4 w-4" />
-          <span className="font-sans text-[7.5px] font-medium uppercase tracking-[0.14em]">
-            Mi pedido
-          </span>
-          {cartCount > 0 ? (
-            <span className="absolute right-[22%] top-2 grid h-4 min-w-4 place-items-center rounded-full bg-pink px-1 font-sans text-[8px] font-semibold text-ink">
-              {cartCount}
-            </span>
-          ) : null}
-        </button>
-        <a
-          href={direct}
-          target="_blank"
-          rel="noreferrer"
-          className="flex flex-col items-center justify-center gap-1 text-gold"
-        >
-          <WhatsAppIcon className="h-4 w-4" />
-          <span className="font-sans text-[7.5px] font-medium uppercase tracking-[0.14em]">
-            WhatsApp
-          </span>
-        </a>
       </div>
     </nav>
-  );
-}
-
-export function FloatingWhatsApp() {
-  const { waLink, cartOpen } = useStore();
-  if (cartOpen) return null;
-  const direct = waLink("¡Hola! Vengo desde la carta digital y quisiera hacer un pedido.");
-
-  return (
-    <a
-      href={direct}
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Pedir por WhatsApp"
-      className="group fixed bottom-6 right-6 z-40 hidden items-center gap-3 lg:flex"
-    >
-      <span className="pointer-events-none translate-x-2 rounded-full border border-gold/25 bg-ink/95 px-4 py-2.5 font-sans text-[9px] uppercase tracking-[0.14em] text-cream/80 opacity-0 shadow-xl backdrop-blur transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-        ¿Pedimos algo rico?
-      </span>
-      <span className="relative grid h-[52px] w-[52px] place-items-center rounded-full bg-gold text-ink shadow-[0_16px_40px_-12px_rgba(201,169,110,0.65)] transition-transform duration-300 group-hover:scale-105">
-        <span className="absolute inset-0 -z-10 animate-ping rounded-full border border-gold/40" />
-        <WhatsAppIcon className="h-6 w-6" />
-      </span>
-    </a>
   );
 }
 
@@ -125,4 +74,3 @@ export function Toast() {
     </div>
   );
 }
-

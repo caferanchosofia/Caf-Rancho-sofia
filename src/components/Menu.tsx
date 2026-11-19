@@ -4,24 +4,19 @@ import {
   VENUES,
   itemPriceLabel,
   priceLabel,
-  type EnrichedItem,
-  type MenuItem,
   type VenueId,
 } from "../data/menu";
 import { useStore } from "../store";
 import { SectionTitle, Ornament } from "./Brand";
 import {
   ArrowRightIcon,
-  CheckIcon,
   BikeIcon,
   CakeIcon,
+  CheckIcon,
   CoffeeIcon,
   CrepeIcon,
-  MinusIcon,
-  PlusIcon,
   SearchIcon,
   SparkleIcon,
-  WhatsAppIcon,
   XIcon,
 } from "./Icons";
 
@@ -30,28 +25,6 @@ function normalize(value: string): string {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
-}
-
-function AddButton({
-  onClick,
-  expanded,
-  label,
-}: {
-  onClick: () => void;
-  expanded?: boolean;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      aria-expanded={expanded}
-      className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-ink/20 bg-transparent text-ink/70 transition-all hover:border-ink hover:bg-ink hover:text-cream active:scale-95"
-    >
-      {expanded ? <MinusIcon className="h-3.5 w-3.5" /> : <PlusIcon className="h-3.5 w-3.5" />}
-    </button>
-  );
 }
 
 function Tag({
@@ -77,19 +50,17 @@ function Tag({
 }
 
 export function Menu() {
-  const { venue, setVenue, addItem, showToast, waLink } = useStore();
+  const { venue, setVenue } = useStore();
   const activeVenue = VENUES.find((entry) => entry.id === venue) ?? VENUES[0];
   const [activeCategoryId, setActiveCategoryId] = useState(
     VENUES.find((entry) => entry.id === venue)!.categories[0].id,
   );
   const [query, setQuery] = useState("");
-  const [openVariant, setOpenVariant] = useState<string | null>(null);
 
   useEffect(() => {
     const selected = VENUES.find((entry) => entry.id === venue);
     if (selected) {
       setActiveCategoryId(selected.categories[0].id);
-      setOpenVariant(null);
     }
   }, [venue]);
 
@@ -109,27 +80,6 @@ export function Menu() {
 
   const accent = activeVenue.accent;
   const searching = query.trim().length > 0;
-
-  const add = (item: EnrichedItem, variant?: { label: string; price: number }) => {
-    addItem(item, variant);
-    showToast(`${item.name}${variant ? ` (${variant.label})` : ""} se agregó a tu pedido`);
-  };
-
-  const addFromCategory = (
-    item: MenuItem,
-    variant?: { label: string; price: number },
-  ) => {
-    add(
-      {
-        ...item,
-        venueId: activeVenue.id,
-        venueName: activeVenue.name,
-        categoryId: activeCategory.id,
-        categoryName: activeCategory.name,
-      },
-      variant,
-    );
-  };
 
   const switchVenue = (id: VenueId) => {
     setVenue(id);
@@ -283,20 +233,16 @@ export function Menu() {
                   No encontramos “{query.trim()}”.
                 </p>
                 <p className="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-ink/55">
-                  Puede que sea una receta fuera de carta. Escríbenos y con gusto te
-                  contamos qué tenemos hoy.
+                  Puede que sea una receta fuera de carta. Prueba con café, crepa,
+                  brownie o el nombre de otro favorito.
                 </p>
-                <a
-                  href={waLink(
-                    `¡Hola! Estaba buscando "${query.trim()}" en la carta y no lo encontré. ¿Me ayudan?`,
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
                   className="mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-cream transition-colors hover:bg-coal"
                 >
-                  <WhatsAppIcon className="h-4 w-4" />
-                  Preguntar por WhatsApp
-                </a>
+                  Ver toda la carta
+                </button>
               </div>
             ) : (
               <div className="mt-7 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -327,29 +273,22 @@ export function Menu() {
                         {item.description}
                       </p>
                     ) : null}
-                    <div className="mt-auto flex items-end justify-between gap-3 pt-4">
+                    <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-4">
                       <p className="font-sans text-[15px] font-medium text-ink">
                         {itemPriceLabel(item)}
                       </p>
                       {item.variants ? (
-                        <div className="flex gap-1.5">
+                        <div className="flex flex-wrap gap-1.5">
                           {item.variants.map((variant) => (
-                            <button
+                            <span
                               key={variant.label}
-                              type="button"
-                              onClick={() => add(item, variant)}
-                              className="rounded-full border border-ink/15 px-2.5 py-1.5 font-sans text-[9px] font-medium text-ink/70 transition-colors hover:border-ink hover:bg-ink hover:text-cream"
+                              className="rounded-full border border-ink/15 px-2.5 py-1.5 font-sans text-[9px] font-medium text-ink/70"
                             >
-                              {variant.label}
-                            </button>
+                              {variant.label} · {priceLabel(variant.price)}
+                            </span>
                           ))}
                         </div>
-                      ) : (
-                        <AddButton
-                          onClick={() => add(item)}
-                          label={`Agregar ${item.name}`}
-                        />
-                      )}
+                      ) : null}
                     </div>
                   </article>
                 ))}
@@ -365,10 +304,7 @@ export function Menu() {
                   <button
                     key={category.id}
                     type="button"
-                    onClick={() => {
-                      setActiveCategoryId(category.id);
-                      setOpenVariant(null);
-                    }}
+                    onClick={() => setActiveCategoryId(category.id)}
                     className={`relative shrink-0 whitespace-nowrap px-4 py-3.5 font-sans text-[10px] font-medium uppercase tracking-[0.14em] transition-colors first:pl-0 ${
                       active ? "text-ink" : "text-ink/45 hover:text-ink/80"
                     }`}
@@ -457,72 +393,40 @@ export function Menu() {
                 </div>
 
                 <ul className="mt-1 divide-y divide-ink/10">
-                  {activeCategory.items.map((item) => {
-                    const expanded = openVariant === item.id;
-                    return (
-                      <li key={item.id} className="py-1">
-                        <div className="group py-4">
-                          <div className="flex items-center gap-2.5">
-                            <h4 className="font-display text-[1.28rem] leading-tight text-ink sm:text-[1.4rem]">
-                              {item.name}
-                            </h4>
-                            {item.tag ? <Tag accent={accent}>{item.tag}</Tag> : null}
-                            <span className="dotted-line" aria-hidden="true" />
-                            <span className="shrink-0 font-sans text-[13px] font-medium text-ink/85 sm:text-[14px]">
-                              {itemPriceLabel(item)}
-                            </span>
-                            <AddButton
-                              onClick={() => {
-                                if (item.variants) {
-                                  setOpenVariant(expanded ? null : item.id);
-                                } else {
-                                  addFromCategory(item);
-                                }
-                              }}
-                              expanded={expanded}
-                              label={
-                                item.variants
-                                  ? `Elegir tamaño de ${item.name}`
-                                  : `Agregar ${item.name} a mi pedido`
-                              }
-                            />
-                          </div>
-                          {item.description ? (
-                            <p className="mt-1.5 max-w-[92%] text-[12px] font-light leading-relaxed text-ink/50">
-                              {item.description}
-                            </p>
-                          ) : null}
-
-                          {expanded && item.variants ? (
-                            <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-ink/10 bg-cream-2 p-2.5 animate-scale-in">
-                              <span className="pl-1 font-sans text-[9px] uppercase tracking-[0.16em] text-ink/45">
-                                Elige el tamaño
-                              </span>
-                              {item.variants.map((variant) => (
-                                <button
-                                  key={variant.label}
-                                  type="button"
-                                  onClick={() => {
-                                    addFromCategory(item, variant);
-                                    setOpenVariant(null);
-                                  }}
-                                  className={`rounded-full px-4 py-1.5 font-sans text-[10.5px] font-medium transition-colors ${
-                                    accent === "pink"
-                                      ? "border border-ink/15 bg-white text-ink/75 hover:border-pink-deep hover:bg-pink-deep hover:text-cream"
-                                      : accent === "mint"
-                                        ? "border border-ink/15 bg-white text-ink/75 hover:border-mint-deep hover:bg-mint-deep hover:text-cream"
-                                        : "border border-ink/15 bg-white text-ink/75 hover:border-ink hover:bg-ink hover:text-cream"
-                                  }`}
-                                >
-                                  {variant.label} · {priceLabel(variant.price)}
-                                </button>
-                              ))}
-                            </div>
-                          ) : null}
+                  {activeCategory.items.map((item) => (
+                    <li key={item.id} className="py-1">
+                      <div className="group py-4">
+                        <div className="flex items-center gap-2.5">
+                          <h4 className="font-display text-[1.28rem] leading-tight text-ink sm:text-[1.4rem]">
+                            {item.name}
+                          </h4>
+                          {item.tag ? <Tag accent={accent}>{item.tag}</Tag> : null}
+                          <span className="dotted-line" aria-hidden="true" />
+                          <span className="shrink-0 font-sans text-[13px] font-medium text-ink/85 sm:text-[14px]">
+                            {itemPriceLabel(item)}
+                          </span>
                         </div>
-                      </li>
-                    );
-                  })}
+                        {item.description ? (
+                          <p className="mt-1.5 max-w-[92%] text-[12px] font-light leading-relaxed text-ink/50">
+                            {item.description}
+                          </p>
+                        ) : null}
+
+                        {item.variants ? (
+                          <div className="mt-3 flex flex-wrap items-center gap-2">
+                            {item.variants.map((variant) => (
+                              <span
+                                key={variant.label}
+                                className="rounded-full border border-ink/15 bg-cream-2 px-3 py-1 font-sans text-[10px] font-medium text-ink/70"
+                              >
+                                {variant.label} · {priceLabel(variant.price)}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    </li>
+                  ))}
                 </ul>
 
                 <div className="mt-7 grid gap-3 sm:grid-cols-2">
@@ -533,10 +437,7 @@ export function Menu() {
                       <button
                         key={category.id}
                         type="button"
-                        onClick={() => {
-                          setActiveCategoryId(category.id);
-                          setOpenVariant(null);
-                        }}
+                        onClick={() => setActiveCategoryId(category.id)}
                         className="group flex items-center gap-3 rounded-2xl border border-ink/12 bg-cream-2 p-2.5 text-left transition-colors hover:border-ink/30 hover:bg-white"
                       >
                         <img
@@ -560,7 +461,7 @@ export function Menu() {
 
                 <p className="mt-5 flex items-center gap-2 font-sans text-[10px] text-ink/40">
                   <SparkleIcon className="h-3 w-3 text-gold-deep" />
-                  ¿Alergias o algún ajuste? Escríbenos por WhatsApp antes de ordenar.
+                  ¿Alergias o algún ajuste? Avísanos en barra y lo preparamos contigo.
                 </p>
               </div>
             </div>

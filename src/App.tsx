@@ -7,8 +7,7 @@ import { QRSection } from "./components/QRSection";
 import { Story, Visit } from "./components/Sections";
 import { Faq } from "./components/Faq";
 import { Footer } from "./components/Footer";
-import { CartDrawer } from "./components/CartDrawer";
-import { FloatingWhatsApp, MobileBar, Toast } from "./components/Chrome";
+import { MobileBar, Toast } from "./components/Chrome";
 
 export default function App() {
   return (
@@ -32,9 +31,7 @@ export default function App() {
           <Visit />
         </main>
         <Footer />
-        <CartDrawer />
         <MobileBar />
-        <FloatingWhatsApp />
         <Toast />
       </div>
     </StoreProvider>

@@ -11,7 +11,6 @@ import {
   PhoneIcon,
   SparkleIcon,
   StarIcon,
-  WhatsAppIcon,
 } from "./Icons";
 
 export function Story() {
@@ -185,10 +184,7 @@ export function Story() {
 }
 
 export function Visit() {
-  const { formattedPhone, waLink } = useStore();
-  const whatsappHref = waLink(
-    "¡Hola! Quisiera saber si están abiertos y cómo llegar a Café Rancho Sofía.",
-  );
+  const { formattedPhone } = useStore();
   const mapHref = CONTACT.mapsUrl;
 
   return (
@@ -238,16 +234,11 @@ export function Visit() {
               <div className="rounded-2xl border border-cream/10 bg-cream/[0.03] p-4">
                 <PhoneIcon className="h-4.5 w-4.5 text-gold" />
                 <p className="mt-3 font-sans text-[8px] uppercase tracking-[0.18em] text-cream/40">
-                  WhatsApp
+                  Teléfono
                 </p>
-                <a
-                  href={whatsappHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-1.5 block font-display text-[1.15rem] leading-none text-cream transition-colors hover:text-gold"
-                >
+                <p className="mt-1.5 font-display text-[1.15rem] leading-none text-cream">
                   {formattedPhone}
-                </a>
+                </p>
               </div>
               <div className="rounded-2xl border border-cream/10 bg-cream/[0.03] p-4">
                 <CreditCardIcon />
@@ -272,15 +263,18 @@ export function Visit() {
                 <MapPinIcon className="h-4 w-4" />
                 Cómo llegar
               </a>
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
+                onClick={() =>
+                  document.getElementById("carta")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  })
+                }
                 className="inline-flex items-center gap-2 rounded-full border border-cream/20 px-5 py-3.5 font-sans text-[10px] font-medium uppercase tracking-[0.14em] text-cream/80 transition-colors hover:border-gold/60 hover:text-gold"
               >
-                <WhatsAppIcon className="h-4 w-4" />
-                Escríbenos
-              </a>
+                Ver la carta
+              </button>
             </div>
             <SocialFollow tone="light" labeled className="mt-7" />
           </div>

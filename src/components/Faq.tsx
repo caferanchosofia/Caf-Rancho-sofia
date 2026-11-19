@@ -1,35 +1,32 @@
 import { useState } from "react";
-import { useStore } from "../store";
 import { Ornament, SectionTitle } from "./Brand";
-import { ArrowUpRightIcon, MinusIcon, PlusIcon, WhatsAppIcon } from "./Icons";
+import { ArrowRightIcon, MinusIcon, PlusIcon } from "./Icons";
 
 const FAQS = [
   {
-    q: "¿Cómo funciona el pedido por WhatsApp?",
-    a: "Elige tus productos, abre «Mi pedido», completa tu nombre y método de entrega. Al enviar, se abre WhatsApp con el resumen ya escrito. Solo tienes que pulsar enviar y nosotros confirmamos disponibilidad y tiempo de preparación.",
+    q: "¿Cómo se usa esta carta digital?",
+    a: "Navega entre Café Rancho Sofía, La Crêpe y Repostería Bikery, elige una categoría y consulta nombres, descripciones y precios. Cuando sepas qué te late, pide en barra o en tu mesa. Esta página es solo para consultar la carta.",
   },
   {
     q: "¿Puedo usar el QR en la mesa del local?",
-    a: "Sí. Descarga el QR desde esta página, imprímelo en tamaño tarjeta o mesa y colócalo donde tus clientes lo vean. También puedes compartir el enlace directamente por estados, historias o chat.",
+    a: "Sí. Descarga el QR desde esta página, imprímelo en tamaño tarjeta o mesa y colócalo donde tus visitas lo vean. También puedes compartir el enlace en historias o estados.",
   },
   {
-    q: "¿A qué número llegan los pedidos de WhatsApp?",
-    a: "Todos los pedidos llegan al número oficial de Café Rancho Sofía: +504 9975-3442. El número está fijo y no se puede editar desde la página pública.",
+    q: "¿El QR abre la carta completa?",
+    a: "Sí. Quien lo escanee ve las tres cartas con precios en lempiras: bebidas del café, crepas de La Crêpe y la repostería de Bikery.",
   },
   {
-    q: "¿Hacen delivery?",
-    a: "Sí, contamos con delivery en zonas cercanas con un costo de L.40. Al finalizar tu pedido puedes elegir «Delivery» y escribir tu dirección. También puedes recoger en el local sin costo adicional.",
+    q: "¿Cuál es el horario?",
+    a: "Abrimos todos los días de 7:00 am a 7:00 pm, en Flores, Comayagua. Ven por un café y quédate por el postre.",
   },
   {
-    q: "¿Puedo pedir ajustes o preguntar por alergias?",
-    a: "Escríbenos por WhatsApp antes de ordenar y con gusto revisamos los ingredientes contigo. En el campo de notas del pedido también puedes indicar preferencias como menos azúcar, sin hielo o sin algún ingrediente.",
+    q: "¿Puedo pedir ajustes o avisar alergias?",
+    a: "Claro. Avísanos en barra antes de ordenar y revisamos los ingredientes contigo: menos azúcar, sin hielo o sin algún ingrediente.",
   },
 ];
 
 export function Faq() {
-  const { waLink } = useStore();
   const [open, setOpen] = useState(0);
-  const direct = waLink("¡Hola! Tengo una pregunta sobre la carta y los pedidos.");
 
   return (
     <section className="relative overflow-hidden bg-cream-2 py-16 lg:py-24">
@@ -45,18 +42,21 @@ export function Faq() {
                   <span className="italic text-gold-deep">frecuentes.</span>
                 </>
               }
-              description="Todo lo que necesitas saber sobre la carta, el QR y los pedidos por WhatsApp."
+              description="Todo lo que necesitas saber sobre la carta digital, el QR y tu visita al rancho."
             />
-            <a
-              href={direct}
-              target="_blank"
-              rel="noreferrer"
+            <button
+              type="button"
+              onClick={() =>
+                document.getElementById("visitanos")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
               className="mt-7 inline-flex items-center gap-2.5 rounded-full border border-ink/20 px-5 py-3.5 font-sans text-[10px] font-medium uppercase tracking-[0.14em] text-ink/70 transition-colors hover:border-ink hover:bg-ink hover:text-cream"
             >
-              <WhatsAppIcon className="h-4 w-4" />
-              Preguntar por WhatsApp
-              <ArrowUpRightIcon className="h-3.5 w-3.5" />
-            </a>
+              Cómo llegar
+              <ArrowRightIcon className="h-3.5 w-3.5" />
+            </button>
             <Ornament tone="dark" className="mt-9 hidden lg:inline-flex" />
           </div>
 

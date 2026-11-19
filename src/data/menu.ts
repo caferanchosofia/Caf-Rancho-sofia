@@ -832,6 +832,8 @@ export const CONTACT = {
   instagram: "https://www.instagram.com/caferanchosofia/",
   facebook: "https://www.facebook.com/profile.php?id=100071518864255",
   tiktok: "https://www.tiktok.com/@caf.rancho.sofia",
+  publicUrl: "https://caf-rancho-sofia.vercel.app",
+  qrSrc: "/qr-rancho-sofia.png",
 };
 
 export function priceLabel(value: number): string {

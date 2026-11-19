@@ -1,10 +1,8 @@
 import { FEATURED_IDS, FEATURED_IMAGES, getItem, priceLabel } from "../data/menu";
-import { useStore } from "../store";
 import { SectionTitle } from "./Brand";
-import { ArrowRightIcon, PlusIcon } from "./Icons";
+import { ArrowRightIcon } from "./Icons";
 
 export function Featured() {
-  const { addItem, showToast } = useStore();
   const favorites = FEATURED_IDS.map((id) => getItem(id));
 
   return (
@@ -30,7 +28,7 @@ export function Featured() {
                 Lo que <span className="italic text-gold">todos</span> piden.
               </>
             }
-            description="Cuatro razones para venir hoy. Toca el signo + y armamos tu pedido para enviarlo por WhatsApp."
+            description="Cuatro razones para venir hoy. Café, frappé, crepas y pancakes de la casa."
           />
           <button
             type="button"
@@ -99,21 +97,10 @@ export function Featured() {
                       </span>
                     ) : null}
                   </p>
-                  <p className="mt-1 line-clamp-1 max-w-[170px] text-[11px] font-light text-cream/45">
+                  <p className="mt-1 line-clamp-1 max-w-[220px] text-[11px] font-light text-cream/45">
                     {item.description}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    addItem(item, item.variants?.[0]);
-                    showToast(`${item.name} se agregó a tu pedido`);
-                  }}
-                  aria-label={`Agregar ${item.name} a mi pedido`}
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-cream text-ink transition-all hover:bg-gold active:scale-95"
-                >
-                  <PlusIcon className="h-4 w-4" />
-                </button>
               </div>
             </article>
           ))}

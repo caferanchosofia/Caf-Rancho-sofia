@@ -1,13 +1,11 @@
-import { QRCodeSVG } from "qrcode.react";
 import { CONTACT } from "../data/menu";
 import { useStore } from "../store";
 import { Ornament, Wordmark } from "./Brand";
 import { SocialFollow } from "./SocialFollow";
-import { MapPinIcon, PhoneIcon, QrIcon, WhatsAppIcon } from "./Icons";
+import { MapPinIcon, PhoneIcon, QrIcon } from "./Icons";
 
 export function Footer() {
-  const { menuUrl, waLink, setVenue, formattedPhone } = useStore();
-  const direct = waLink("¡Hola! Vengo desde su página y quisiera hacer un pedido.");
+  const { setVenue, formattedPhone } = useStore();
 
   const goTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -30,17 +28,6 @@ export function Footer() {
               Café de especialidad, crepería y repostería. Tres conceptos bajo un mismo
               techo, hechos para disfrutarse sin prisa.
             </p>
-            <div className="mt-6 flex items-center gap-2">
-              <a
-                href={direct}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="WhatsApp de Café Rancho Sofía"
-                className="grid h-10 w-10 place-items-center rounded-full border border-cream/15 text-cream/60 transition-colors hover:border-gold/60 hover:text-gold"
-              >
-                <WhatsAppIcon className="h-4 w-4" />
-              </a>
-            </div>
             <SocialFollow tone="light" className="mt-6" />
           </div>
 
@@ -102,14 +89,13 @@ export function Footer() {
                 </li>
               ))}
               <li>
-                <a
-                  href={direct}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  type="button"
+                  onClick={() => goTo("carta")}
                   className="text-[12px] font-light text-cream/50 transition-colors hover:text-gold"
                 >
-                  Pedir por WhatsApp
-                </a>
+                  Ver la carta
+                </button>
               </li>
             </ul>
           </div>
@@ -122,15 +108,13 @@ export function Footer() {
               className="group mt-4 flex items-center gap-3 rounded-2xl border border-cream/10 bg-cream/[0.03] p-2.5 text-left transition-colors hover:border-gold/40"
               aria-label="Ver y descargar el código QR de la carta"
             >
-              <span className="rounded-lg bg-cream p-1.5">
-                <QRCodeSVG
-                  value={menuUrl}
-                  size={58}
-                  level="M"
-                  marginSize={0}
-                  bgColor="#f7f1e6"
-                  fgColor="#191510"
-                  title="QR de la carta digital"
+              <span className="rounded-lg bg-white p-1">
+                <img
+                  src={CONTACT.qrSrc}
+                  alt="QR de la carta digital"
+                  width={58}
+                  height={58}
+                  className="h-[58px] w-[58px] object-contain"
                 />
               </span>
               <span>
@@ -152,15 +136,10 @@ export function Footer() {
                 <MapPinIcon className="mt-0.5 h-3 w-3 shrink-0 text-gold/60" />
                 {CONTACT.address}
               </p>
-              <a
-                href={direct}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-[10.5px] font-light text-cream/40 transition-colors hover:text-gold"
-              >
+              <p className="flex items-center gap-2 text-[10.5px] font-light text-cream/40">
                 <PhoneIcon className="h-3 w-3 shrink-0 text-gold/60" />
                 {formattedPhone}
-              </a>
+              </p>
             </div>
           </div>
         </div>

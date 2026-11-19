@@ -1,5 +1,4 @@
 import { IMG } from "../data/menu";
-import { useStore } from "../store";
 import { Ornament, RanchoSofiaLogo } from "./Brand";
 import {
   ArrowRightIcon,
@@ -7,7 +6,6 @@ import {
   MapPinIcon,
   SparkleIcon,
   StarIcon,
-  WhatsAppIcon,
 } from "./Icons";
 
 function goToMenu() {
@@ -15,10 +13,6 @@ function goToMenu() {
 }
 
 export function Hero() {
-  const { waLink } = useStore();
-  const heroWhatsApp = waLink(
-    "¡Hola, Café Rancho Sofía! Vengo desde la carta digital y quisiera ordenar algo rico.",
-  );
 
   return (
     <section
@@ -69,15 +63,16 @@ export function Hero() {
               Explorar la carta
               <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
-            <a
-              href={heroWhatsApp}
-              target="_blank"
-              rel="noreferrer"
+            <button
+              type="button"
+              onClick={() =>
+                document.getElementById("visitanos")?.scrollIntoView({ behavior: "smooth" })
+              }
               className="inline-flex items-center justify-center gap-3 rounded-full border border-cream/25 px-7 py-4 font-sans text-[11px] font-medium uppercase tracking-[0.16em] text-cream transition-colors hover:border-gold hover:text-gold"
             >
-              <WhatsAppIcon className="h-[17px] w-[17px]" />
-              Pedir por WhatsApp
-            </a>
+              <MapPinIcon className="h-[17px] w-[17px]" />
+              Cómo llegar
+            </button>
           </div>
 
           <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-cream/10 pt-6">
@@ -183,7 +178,7 @@ const TICKER_ITEMS = [
   "Crepas hechas a mano",
   "Repostería Bikery",
   "Ingredientes frescos",
-  "Pedidos por WhatsApp",
+  "Carta digital",
   "Tres conceptos, una casa",
   "Hecho en Honduras",
 ];

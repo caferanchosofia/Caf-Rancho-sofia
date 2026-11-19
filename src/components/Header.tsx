@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { useStore } from "../store";
 import { Wordmark } from "./Brand";
 import { SocialFollow } from "./SocialFollow";
-import { BagIcon, MenuIcon, QrIcon, WhatsAppIcon, XIcon } from "./Icons";
+import { MenuIcon, QrIcon, XIcon } from "./Icons";
 
 const NAV_LINKS = [
   { label: "La carta", href: "carta" },
   { label: "Nuestra historia", href: "nosotros" },
   { label: "Visítanos", href: "visitanos" },
-  { label: "QR & WhatsApp", href: "qr" },
+  { label: "Código QR", href: "qr" },
 ];
 
 export function Header() {
-  const { cartCount, setCartOpen, setVenue, waLink } = useStore();
+  const { setVenue } = useStore();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -47,9 +47,6 @@ export function Header() {
     setMobileOpen(false);
     window.setTimeout(() => goTo("carta"), 60);
   };
-
-  const orderMessage = "¡Hola! Vengo desde la carta digital y me gustaría hacer un pedido.";
-  const whatsappHref = waLink(orderMessage);
 
   return (
     <>
@@ -107,31 +104,12 @@ export function Header() {
               <QrIcon className="h-[18px] w-[18px]" />
             </button>
 
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noreferrer"
-              className="hidden items-center gap-2 rounded-full bg-gold px-5 py-2.5 font-sans text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink transition-all hover:bg-gold-light active:scale-[0.98] md:inline-flex"
-            >
-              <WhatsAppIcon className="h-4 w-4" />
-              Pedir por WhatsApp
-            </a>
-
             <button
               type="button"
-              onClick={() => setCartOpen(true)}
-              aria-label={`Abrir mi pedido, ${cartCount} productos`}
-              className="relative flex h-10 items-center gap-2 rounded-full border border-cream/15 px-3 text-cream/85 transition-colors hover:border-gold/60 hover:text-gold"
+              onClick={() => goTo("carta")}
+              className="hidden items-center gap-2 rounded-full bg-gold px-5 py-2.5 font-sans text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink transition-all hover:bg-gold-light active:scale-[0.98] md:inline-flex"
             >
-              <BagIcon className="h-[18px] w-[18px]" />
-              <span className="hidden font-sans text-[10px] font-medium uppercase tracking-[0.14em] lg:inline">
-                Mi pedido
-              </span>
-              {cartCount > 0 ? (
-                <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-pink px-1 font-sans text-[10px] font-semibold text-ink">
-                  {cartCount}
-                </span>
-              ) : null}
+              Ver la carta
             </button>
 
             <button
@@ -194,39 +172,21 @@ export function Header() {
             </nav>
 
             <div className="mt-8 grid gap-3">
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
+                onClick={() => goTo("carta")}
                 className="flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.16em] text-ink"
               >
-                <WhatsAppIcon className="h-4 w-4" />
-                Pedir por WhatsApp
-              </a>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    goTo("qr");
-                  }}
-                  className="flex items-center justify-center gap-2 rounded-full border border-cream/20 px-4 py-3.5 font-sans text-[10.5px] uppercase tracking-[0.15em] text-cream/80"
-                >
-                  <QrIcon className="h-4 w-4" />
-                  Nuestro QR
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    setCartOpen(true);
-                  }}
-                  className="flex items-center justify-center gap-2 rounded-full border border-cream/20 px-4 py-3.5 font-sans text-[10.5px] uppercase tracking-[0.15em] text-cream/80"
-                >
-                  <BagIcon className="h-4 w-4" />
-                  Mi pedido {cartCount > 0 ? `(${cartCount})` : ""}
-                </button>
-              </div>
+                Ver la carta
+              </button>
+              <button
+                type="button"
+                onClick={() => goTo("qr")}
+                className="flex items-center justify-center gap-2 rounded-full border border-cream/20 px-4 py-3.5 font-sans text-[10.5px] uppercase tracking-[0.15em] text-cream/80"
+              >
+                <QrIcon className="h-4 w-4" />
+                Nuestro QR
+              </button>
             </div>
 
             <div className="mt-auto pt-10">
